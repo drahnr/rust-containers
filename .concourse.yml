@@ -1,0 +1,199 @@
+resource_types:
+- name: pull-request
+  type: registry-image
+  source:
+    repository: teliaoss/github-pr-resource
+
+- name: buildkit-resource
+  type: registry-image
+  source:
+    repository: vito/oci-build-task
+
+resources:
+
+# - name: daily
+#   type: time
+#   icon: alarm
+#   source:
+#     location: Europe/Berlin
+#     interval: 24h
+#     start: 3:00 AM
+#     stop: 5:00 PM
+
+- name: recipe-rust-glibc-env
+  type: git
+  icon: git
+  source:
+    branch: master
+    uri: git@github.com:drahnr/rust-containers.git
+    private_key: ((sirmergealot-ssh-key))
+    paths: [ Dockerfile.rustglibc ]
+
+- name: recipe-rust-musl-env
+  type: git
+  icon: git
+  source:
+    branch: master
+    uri: git@github.com:drahnr/rust-containers.git
+    private_key: ((sirmergealot-ssh-key))
+    paths: [ Dockerfile.rustmusl ]
+
+- name: recipe-cxx-env
+  type: git
+  icon: git
+  source:
+    branch: master
+    uri: git@github.com:drahnr/rust-containers.git
+    private_key: ((sirmergealot-ssh-key))
+    paths: [ Dockerfile.cxxenv ]
+
+- name: env-rust-musl
+  type: registry-image
+  icon: docker
+  source:
+    repository: quay.io/drahnr/rust-musl-builder
+    username: ((quay-drahnr-username))
+    password: ((quay-drahnr-password))
+
+- name: env-rust-glibc
+  type: registry-image
+  icon: docker
+  source:
+    tag: latest
+    repository: quay.io/drahnr/rust-glibc-builder
+    username: ((quay-drahnr-username))
+    password: ((quay-drahnr-password))
+
+- name: env-cxx
+  type: registry-image
+  icon: docker
+  source:
+    tag: latest
+    repository: quay.io/drahnr/container-cxx-env
+    username: ((quay-drahnr-username))
+    password: ((quay-drahnr-password))
+
+jobs:
+  - name: create-rust-musl-env
+    build_logs_to_retain: 5
+    public: true
+    serial: true
+    plan:
+    - get: recipe
+      resource: recipe-rust-musl-env
+      trigger: true
+
+    - get: timed-trigger
+      resource: daily
+      trigger: true
+
+    - task: build
+      privileged: true
+
+      config:
+        platform: linux
+
+        image_resource:
+          type: registry-image
+          source:
+            repository: vito/oci-build-task
+
+        # TODO caching!
+        params:
+          DOCKERFILE: recipe/Dockerfile.rustmusl
+
+        inputs:
+        - name: recipe
+
+        outputs:
+        - name: image
+
+        run:
+          path: build
+
+    - put: env-rust-musl
+      params: {image: image/image.tar}
+
+
+
+
+  - name: create-rust-glibc-env
+    build_logs_to_retain: 5
+    public: true
+    serial: true
+    plan:
+    - get: recipe
+      resource: recipe-rust-glibc-env
+      trigger: true
+
+    - get: timed-trigger
+      resource: daily
+      trigger: true
+
+    - task: build
+      privileged: true
+
+      config:
+        platform: linux
+
+        image_resource:
+          type: registry-image
+          source:
+            repository: vito/oci-build-task
+
+        params:
+          DOCKERFILE: recipe/Dockerfile.rustglibc
+
+        inputs:
+        - name: recipe
+
+        outputs:
+        - name: image
+
+        run:
+          path: build
+
+    - put: env-rust-glibc
+      params: {image: image/image.tar}
+
+
+
+  - name: create-cxx-env
+    build_logs_to_retain: 5
+    public: true
+    serial: true
+    plan:
+    - get: recipe
+      resource: recipe-cxx-env
+      trigger: true
+
+    - get: timed-trigger
+      resource: daily
+      trigger: true
+
+    - task: build
+      privileged: true
+
+      config:
+        platform: linux
+
+        image_resource:
+          type: registry-image
+          source:
+            repository: vito/oci-build-task
+
+        params:
+          DOCKERFILE: recipe/Dockerfile.cxxenv
+
+        inputs:
+        - name: recipe
+
+        outputs:
+        - name: image
+
+        run:
+          path: build
+
+    - put: env-cxx
+      params: {image: image/image.tar}
+
