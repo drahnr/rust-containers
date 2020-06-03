@@ -24,6 +24,7 @@ RUN dnf update -y && \
         sqlite-devel \
         openssl-devel \
         glibc-devel \
+        hunspell hunspell-devel \
         pkgconf \
         sudo \
         make \
@@ -130,9 +131,10 @@ ENV OPENSSL_DIR=/usr/local/ \
 
 # Install some useful Rust tools from source. This will use the static linking
 # toolchain, but that should be OK.
-# RUN cargo install -f cargo-audit && \
-#     cargo install -f cargo-bloat && \
-#     sudo rm -rf /home/sirmergealot/.cargo/registry/
+RUN cargo install -f cargo-audit && \
+    cargo install -f cargo-bloat && \
+    cargo install -f cargo-spellcheck && \
+    sudo rm -rf /home/sirmergealot/.cargo/registry/
 
 # Expect our source code to live in /home/sirmergealot/src.  We'll run the build as
 # user `sirmergealot`, which will be uid 1000, gid 1000 outside the container.
