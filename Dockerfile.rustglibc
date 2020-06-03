@@ -15,14 +15,11 @@ ARG OPENSSL_VERSION=1.1.1c
 # `mdbook` is the standard Rust tool for making searchable HTML manuals.
 RUN dnf update -y && \
     dnf install -y \
-        gcc clang llvm \
+        gcc clang clang-devel llvm \
         cmake \
         curl \
         file \
         git \
-        libpq-devel \
-        sqlite-devel \
-        openssl-devel \
         glibc-devel \
         hunspell hunspell-devel \
         pkgconf \
@@ -61,6 +58,7 @@ RUN curl https://sh.rustup.rs -sSf | \
     sh -s -- -y --default-toolchain stable
 RUN rustup toolchain add nightly beta
 RUN rustup component add clippy
+RUN rustup component add fmt
 
 # Build a static library version of OpenSSL using musl-libc.  This is needed by
 # the popular Rust `hyper` crate.
