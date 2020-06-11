@@ -2,7 +2,7 @@ FROM fedora:latest
 
 # The OpenSSL version to use. We parameterize this because many Rust
 # projects will fail to build with 1.1.
-ARG OPENSSL_VERSION=1.1.1c
+ARG OPENSSL_VERSION=1.1.1g
 
 # Make sure we have basic dev tools for building C libraries.  Our goal
 # here is to support the musl-libc builds and Cargo builds needed for a
@@ -60,6 +60,7 @@ RUN rustup toolchain add nightly beta
 RUN rustup component add clippy
 RUN rustup component add rustfmt
 
+RUN sudo ln -s /usr/local/lib64 /usr/local/lib
 # Build a static library version of OpenSSL using musl-libc.  This is needed by
 # the popular Rust `hyper` crate.
 #
@@ -76,7 +77,8 @@ RUN echo "Building OpenSSL" && \
     make depend && \
     make && \
     sudo make install && \
-    sudo rm -r /tmp/*
+    sudo rm -r /tmp/* && \
+    echo "Compiling libs openssl/ssl/crypto complete!\n\n"
 
 RUN echo "Building zlib" && \
     cd /tmp && \
@@ -87,21 +89,8 @@ RUN echo "Building zlib" && \
     ./configure --static --prefix=/usr/local/ && \
     make && \
     sudo make install && \
-    sudo rm -r /tmp/*
-
-RUN echo "Building libpq" && \
-    cd /tmp && \
-    POSTGRESQL_VERSION=11.2 && \
-    curl -LO "https://ftp.postgresql.org/pub/source/v$POSTGRESQL_VERSION/postgresql-$POSTGRESQL_VERSION.tar.gz" && \
-    tar xzf "postgresql-$POSTGRESQL_VERSION.tar.gz" && cd "postgresql-$POSTGRESQL_VERSION" && \
-    ./configure --with-openssl --without-readline --prefix=/usr/local/ && \
-    cd src/interfaces/libpq && \
-    make all-static-lib && \
-    sudo make install-lib-static && \
-    cd ../../bin/pg_config && \
-    make && \
-    sudo make install && \
-    sudo rm -r /tmp/*
+    sudo rm -r /tmp/* && \
+    echo "Compiling zlib complete!\n\n"
 
 RUN echo "Building libgit" && \
     cd /tmp && \
@@ -110,7 +99,8 @@ RUN echo "Building libgit" && \
     tar xzf "v${LIBGIT2_VERSION}.tar.gz" && cd "./libgit2-${LIBGIT2_VERSION}/" && \
     mkdir build && cd build && \
     cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DBUILD_CLAR=OFF -DCMAKE_INSTALL_PREFIX=/usr/local/ .. && \
-    sudo cmake --build . --target install
+    sudo cmake --build . --target install && \
+    echo "Compiling libgit complete!\n\n"
 
 ENV OPENSSL_DIR=/usr/local/ \
     OPENSSL_INCLUDE_DIR=/usr/local/include/ \
