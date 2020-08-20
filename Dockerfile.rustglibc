@@ -27,6 +27,7 @@ RUN dnf update -y && \
         make \
         cmake \
         libseccomp-static libseccomp libseccomp-devel \
+        mingw64-winpthreads-static mingw64-gcc mingw64-gcc-c++ \
         && \
     dnf clean all && rm -rf /var/cache/* && \
     useradd sirmergealot --user-group --create-home --shell /bin/bash --groups wheel
@@ -59,6 +60,7 @@ RUN curl https://sh.rustup.rs -sSf | \
 RUN rustup toolchain add nightly beta
 RUN rustup component add clippy
 RUN rustup component add rustfmt
+RUN rustup target add x86_64-pc-windows-gnu
 
 RUN sudo ln -s /usr/local/lib64 /usr/local/lib
 # Build a static library version of OpenSSL using musl-libc.  This is needed by

@@ -203,6 +203,7 @@ jobs:
           args:
           - -exc
           - |
+            sudo chown $(whoami): -Rf .
             rustc --version
             cargo init --bin testy
             cd testy
