@@ -135,6 +135,8 @@ jobs:
           args:
           - -exc
           - |
+            rustup which rustc
+            rustup default
             rustc --version
             cargo init --bin testy
             cd testy
@@ -199,11 +201,14 @@ jobs:
         - name: env-rust-glibc
 
         run:
+          user: rust
           path: sh
           args:
           - -exc
           - |
             sudo chown $(whoami): -Rf .
+            rustup which rustc
+            rustup default
             rustc --version
             cargo init --bin testy
             cd testy

@@ -29,6 +29,8 @@ RUN dnf update -y && \
         libseccomp-static libseccomp libseccomp-devel \
         mingw64-winpthreads-static mingw64-gcc mingw64-gcc-c++ \
         perl-FindBin \
+        perl-Test-More-UTF8 \
+        perl-Text-Template \
         && \
     dnf clean all && rm -rf /var/cache/* && \
     useradd sirmergealot --user-group --create-home --shell /bin/bash --groups wheel
