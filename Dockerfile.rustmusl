@@ -14,6 +14,7 @@ RUN dnf -y install \
 	musl-devel \
 	musl-filesystem
 
+USER sirmergealot
 
 RUN rustup toolchain install \
         stable-x86_64-unknown-linux-musl \
