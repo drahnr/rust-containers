@@ -1,4 +1,4 @@
-FROM quay.io/drahnr/rust-musl-builder
+FROM quay.io/drahnr/rust-glibc-builder
 
 LABEL maintainer="Bernhard Schuster <bernhard@ahoi.io>"
 
