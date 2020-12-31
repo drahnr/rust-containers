@@ -16,6 +16,8 @@ RUN dnf -y install \
 
 USER sirmergealot
 
+RUN rustup target add x86_64-unknown-linux-musl
+
 RUN rustup toolchain install \
         stable-x86_64-unknown-linux-musl \
         beta-x86_64-unknown-linux-musl \
