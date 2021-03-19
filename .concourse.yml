@@ -51,6 +51,7 @@ resources:
   type: registry-image
   icon: docker
   source:
+    tag: latest
     repository: quay.io/drahnr/rust-musl-builder
     username: ((quay-drahnr-username))
     password: ((quay-drahnr-password))
@@ -201,7 +202,7 @@ jobs:
         - name: env-rust-glibc
 
         run:
-          user: rust
+          user: sirmergealot
           path: sh
           args:
           - -exc
