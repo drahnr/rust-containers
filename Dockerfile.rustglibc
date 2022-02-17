@@ -28,6 +28,7 @@ RUN dnf update -y && \
         cmake \
         libseccomp-static libseccomp libseccomp-devel \
         mingw64-winpthreads-static mingw64-gcc mingw64-gcc-c++ \
+        sd ripgrep fd-find \
         && \
     dnf clean all && rm -rf /var/cache/*
 
