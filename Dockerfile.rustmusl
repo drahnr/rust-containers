@@ -11,6 +11,9 @@ RUN apt-get update -y && \
 
 #USER rust
 
+COPY musl-cargo-config.toml ~/.cargo/config.toml 
+
+
 ENV CMAKE_MAKE_PROGRAM=make
 
 RUN rustup toolchain install --force-non-host \
