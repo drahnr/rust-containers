@@ -97,11 +97,12 @@ jobs:
         image_resource:
           type: registry-image
           source:
-            repository: vito/oci-build-task
+            repository: concourse/oci-build-task
 
         # TODO caching!
         params:
           DOCKERFILE: recipe/Dockerfile.rustmusl
+          CONTEXT: recipe
 
         inputs:
         - name: recipe
@@ -172,10 +173,10 @@ jobs:
         image_resource:
           type: registry-image
           source:
-            repository: vito/oci-build-task
-
+            repository: concourse/oci-build-task
         params:
           DOCKERFILE: recipe/Dockerfile.rustglibc
+          CONTEXT: recipe
 
         inputs:
         - name: recipe
