@@ -13,7 +13,7 @@ RUN apt-get update -y && \
 
 ENV CMAKE_MAKE_PROGRAM=make
 
-RUN rustup toolchain install \
+RUN rustup toolchain install --force-non-host \
         stable-x86_64-unknown-linux-musl \
         beta-x86_64-unknown-linux-musl \
         nightly-x86_64-unknown-linux-musl
