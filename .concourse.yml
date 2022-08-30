@@ -136,6 +136,11 @@ jobs:
           args:
           - -exc
           - |
+            cat << EOF
+            [build]
+            target = "x86_64-unknown-linux-musl"
+            EOF > ~/.cargo/config.toml
+
             rustup which rustc
             rustup default
             rustc --version
