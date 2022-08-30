@@ -6,7 +6,7 @@ USER root
 
 RUN apt-get update -y && \
 	apt-get install -y autoconf automake libtool sed && \
-	ln -s /bin/sed /usr/bin/sed && \
+	$(ln -s /bin/sed /usr/bin/sed || true) && \
 	rm -rf /var/cache
 
 #USER rust

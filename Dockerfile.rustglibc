@@ -26,6 +26,7 @@ RUN dnf update -y && \
         sudo \
         make \
         cmake \
+        xz \
         libseccomp-static libseccomp libseccomp-devel \
         mingw64-winpthreads-static mingw64-gcc mingw64-gcc-c++ \
         sd ripgrep fd-find \
@@ -100,9 +101,9 @@ RUN echo "Building OpenSSL" && \
 
 RUN echo "Building zlib" && \
     cd /tmp && \
-    ZLIB_VERSION=1.2.11 && \
-    curl -LO "http://zlib.net/zlib-$ZLIB_VERSION.tar.gz" && \
-    tar xzf "zlib-$ZLIB_VERSION.tar.gz" && \
+    ZLIB_VERSION=1.2.12 && \
+    curl -LO "http://zlib.net/zlib-$ZLIB_VERSION.tar.xz" && \
+    tar xzf "zlib-$ZLIB_VERSION.tar.xz" && \
     cd "zlib-$ZLIB_VERSION" && \
     ./configure --static --prefix=/usr/local/ && \
     make && \
