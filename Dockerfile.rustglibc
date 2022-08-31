@@ -143,7 +143,7 @@ RUN cargo install -f cargo-spellcheck && \
 	 cargo install -f cargo-audit && \
 	 cargo install -f cargo-license && \
 	 cargo install -f cargo-semver-checks && \
-	 cargo install -f taplo-cli && \
+	 cargo install --bin taplo --git https://github.com/drahnr/taplo.git taplo-cli && \
 	 rm -rf /home/sirmergealot/.cargo/registry/
 
 # Expect our source code to live in /home/sirmergealot/src.  We'll run the build as
