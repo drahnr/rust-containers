@@ -63,8 +63,12 @@ RUN curl https://sh.rustup.rs -sSf | \
 RUN rustup toolchain add nightly beta
 RUN rustup component add clippy
 RUN rustup component add rustfmt
-RUN rustup target add x86_64-pc-windows-gnu
-RUN rustup target add wasm32-unknown-unknown
+RUN rustup +stable target add x86_64-pc-windows-gnu
+RUN rustup +beta target add x86_64-pc-windows-gnu
+RUN rustup +nightly target add x86_64-pc-windows-gnu
+RUN rustup +stable target add wasm32-unknown-unknown
+RUN rustup +beta target add wasm32-unknown-unknown
+RUN rustup +nightly target add wasm32-unknown-unknown
 
 RUN sudo ln -s /usr/local/lib64 /usr/local/lib
 # Build a static library version of OpenSSL using musl-libc.  This is needed by
