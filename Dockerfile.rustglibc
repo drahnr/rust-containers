@@ -2,7 +2,7 @@ FROM fedora:latest
 
 # The OpenSSL version to use. We parameterize this because many Rust
 # projects will fail to build with 1.1.
-ARG OPENSSL_VERSION=1.1.1i
+ARG OPENSSL_VERSION=1.1.1q
 
 # Make sure we have basic dev tools for building C libraries.  Our goal
 # here is to support the musl-libc builds and Cargo builds needed for a
@@ -64,6 +64,7 @@ RUN rustup toolchain add nightly beta
 RUN rustup component add clippy
 RUN rustup component add rustfmt
 RUN rustup target add x86_64-pc-windows-gnu
+RUN rustup target add wasm32-unknown-unknown
 
 RUN sudo ln -s /usr/local/lib64 /usr/local/lib
 # Build a static library version of OpenSSL using musl-libc.  This is needed by
