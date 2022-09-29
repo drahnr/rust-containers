@@ -4,6 +4,13 @@ FROM fedora:latest
 # projects will fail to build with 1.1.
 ARG OPENSSL_VERSION=1.1.1q
 
+ARG ZLIB_VERSION=1.2.12
+
+ARG MOLD_VERSION=1.5.1
+ARG MDBOOK_VERSION=0.4.21
+
+ARG LIBGIT2_VERSION=0.28.3
+
 # Make sure we have basic dev tools for building C libraries.  Our goal
 # here is to support the musl-libc builds and Cargo builds needed for a
 # large selection of the most popular crates.
@@ -35,7 +42,7 @@ RUN dnf update -y && \
 
 RUN  useradd sirmergealot --user-group --create-home --shell /bin/bash --groups wheel
 
-RUN MDBOOK_VERSION=0.3.1 && \
+RUN \
     curl -LO https://github.com/rust-lang-nursery/mdBook/releases/download/v$MDBOOK_VERSION/mdbook-v$MDBOOK_VERSION-x86_64-unknown-linux-gnu.tar.gz && \
     tar xf mdbook-v$MDBOOK_VERSION-x86_64-unknown-linux-gnu.tar.gz && \
     mv mdbook /usr/local/bin/ && \
@@ -90,6 +97,12 @@ RUN dnf update -y && \
         && \
     dnf clean all && rm -rf /var/cache/*
 
+# install mold first, so it's picked up by all compillations passes following?
+RUN echo "Installing mold" && cd /tmp && \
+curl https://github.com/rui314/mold/releases/download/v${MOLD_VERSIOn}/mold-${MOLD_VERSION}-x86_64-linux.tar.gz | tar xvz && \
+cp /tmp/mold-${MOLD_VERSION}-x86_64-linux/bin/* /usr/local/bin/ && \
+chmod +x /usr/local/bin/*
+
 USER sirmergealot
 
 RUN echo "Building OpenSSL" && \
@@ -106,7 +119,6 @@ RUN echo "Building OpenSSL" && \
 
 RUN echo "Building zlib" && \
     cd /tmp && \
-    ZLIB_VERSION=1.2.12 && \
     curl -LO "http://zlib.net/zlib-$ZLIB_VERSION.tar.xz" && \
     tar xJf "zlib-$ZLIB_VERSION.tar.xz" && \
     cd "zlib-$ZLIB_VERSION" && \
@@ -118,7 +130,6 @@ RUN echo "Building zlib" && \
 
 RUN echo "Building libgit" && \
     cd /tmp && \
-    LIBGIT2_VERSION="0.28.3" && \
     curl -LO "https://github.com/libgit2/libgit2/archive/v${LIBGIT2_VERSION}.tar.gz" && \
     tar xzf "v${LIBGIT2_VERSION}.tar.gz" && cd "./libgit2-${LIBGIT2_VERSION}/" && \
     mkdir build && cd build && \
