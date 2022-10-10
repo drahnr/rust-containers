@@ -39,6 +39,7 @@ RUN dnf update -y && \
         sd ripgrep fd-find \
         protobuf-static protobuf protobuf-compiler \
         capnproto-devel capnproto capnproto-libs \
+        rocksdb rocksdb-devel rocksdb-static \
         && \
     dnf clean all && rm -rf /var/cache/*
 
