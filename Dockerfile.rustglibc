@@ -94,6 +94,7 @@ RUN dnf update -y && \
         perl-File-Compare \
         perl-Test-More-UTF8 \
         perl-Text-Template \
+        protobuf-static protobuf protobuf-compiler \
         && \
     dnf clean all && rm -rf /var/cache/*
 
