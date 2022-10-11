@@ -157,6 +157,23 @@ ENV OPENSSL_DIR=/usr/local/ \
     PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig/ \
     LIBZ_SYS_STATIC=1
 
+# https://github.com/drahnr/rocksdb-rpm-specfile/
+# TODO ROCKSDB static is still missing
+ENV \
+    ROCKSDB_LIB_DIR=/usr/lib64 \
+    ROCKSDB_STATIC=false \
+    ZLIB_LIB_DIR=/usr/lib64 \
+    ZLIB_STATIC=true \
+    ZSTD_LIB_DIR=/usr/lib64 \
+    ZSTD_STATIC=true \
+    LZ4_LIB_DIR=/usr/lib64 \
+    LZ4_STATIC=true \
+    BZIP2_LIB_DIR=/usr/lib64 \
+    BZIP2_STATIC=true \
+    BZ2_LIB_DIR=/usr/lib64 \
+    BZ2_STATIC=true \
+    SNAPPY_LIB_DIR=/usr/lib64
+
 # (Please feel free to submit pull requests for musl-libc builds of other C
 # libraries needed by the most popular and common Rust crates, to avoid
 # everybody needing to build them manually.)
