@@ -161,7 +161,6 @@ ENV OPENSSL_DIR=/usr/local/ \
 # TODO ROCKSDB static is still missing
 ENV \
     ROCKSDB_LIB_DIR=/usr/lib64 \
-    ROCKSDB_STATIC=false \
     ZLIB_LIB_DIR=/usr/lib64 \
     ZLIB_STATIC=true \
     ZSTD_LIB_DIR=/usr/lib64 \
