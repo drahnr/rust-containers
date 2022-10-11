@@ -33,7 +33,12 @@ RUN dnf update -y && \
         sudo \
         make \
         cmake \
-        xz \
+        xz xz-static xz-devel \
+        zlib zlib-devel zlib-static \
+        snappy snappy-devel \
+        zstd libzstd-devel libzstd-static \
+        bzip2 bzip2-devel bzip2-static \
+        lz4 lz4-libs lz4-devel lz4-static \
         libseccomp-static libseccomp libseccomp-devel \
         mingw64-winpthreads-static mingw64-gcc mingw64-gcc-c++ \
         sd ripgrep fd-find \
