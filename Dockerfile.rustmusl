@@ -1,26 +1,42 @@
-FROM clux/muslrust:latest
+FROM alpine:edge
 
 LABEL maintainer="Bernhard Schuster <bernhard@ahoi.io>"
 
 USER root
 
-RUN apt-get update -y && \
-	apt-get install -y autoconf automake libtool sed && \
-	$(ln -s /bin/sed /usr/bin/sed || true) && \
-	rm -rf /var/cache
-
-#USER rust
+RUN apk --no-cache add \
+        g++ \
+        gcc \
+        make \
+        hunspell \
+        openssl \
+        cmake \
+        autoconf \
+        automake \
+        xz \
+        zlib \
+        libbz2 \
+        lz4 \
+        which \
+        fd \
+        ripgrep \
+        curl \
+        wget \
+        clang \
+        lld
 
 COPY musl-cargo-config.toml ~/.cargo/config.toml 
 
-
 ENV CMAKE_MAKE_PROGRAM=make
 
-RUN rustup toolchain install --force-non-host \
+
+RUN curl -o setup.sh --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs && chmod +x setup.sh && ./setup.sh -y && rm setup.sh
+
+RUN source $HOME/.cargo/env && rustup toolchain install --force-non-host \
         stable-x86_64-unknown-linux-musl \
         beta-x86_64-unknown-linux-musl \
         nightly-x86_64-unknown-linux-musl
 
-RUN rustup component add clippy
-RUN rustup target add x86_64-unknown-linux-musl
-RUN rustup default nightly
+RUN source $HOME/.cargo/env && rustup component add clippy
+RUN source $HOME/.cargo/env && rustup target add x86_64-unknown-linux-musl
+RUN source $HOME/.cargo/env && rustup default nightly

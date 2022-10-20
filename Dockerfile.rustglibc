@@ -158,7 +158,7 @@ ENV OPENSSL_DIR=/usr/local/ \
     LIBZ_SYS_STATIC=1
 
 # https://github.com/drahnr/rocksdb-rpm-specfile/
-# TODO ROCKSDB static is still missing
+# TODO ROCKSDB static is still missing, setting it to _any_ value implies static linkage
 ENV \
     ROCKSDB_LIB_DIR=/usr/lib64 \
     ZLIB_LIB_DIR=/usr/lib64 \
