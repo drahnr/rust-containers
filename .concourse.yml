@@ -140,9 +140,7 @@ jobs:
             rustc --version
             cargo init --bin testy
             cd testy
-            cargo +stable b
-            cargo +beta b
-            cargo +nightly b
+            cargo build
 
   - name: create-rust-glibc-env
     build_logs_to_retain: 5
