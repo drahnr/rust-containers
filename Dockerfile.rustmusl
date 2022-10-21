@@ -47,6 +47,10 @@ RUN apk --no-cache add \
         strace \
         valgrind \
         rust \
+        rust-wasm \
+        rust-clippy \
+        rust-stdlib \
+        rustfmt \
         cargo
 
 # COPY musl-cargo-config.toml ~/.cargo/config.toml 
