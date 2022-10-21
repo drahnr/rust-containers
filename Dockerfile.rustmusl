@@ -45,22 +45,24 @@ RUN apk --no-cache add \
         ncurses-libs \
         ncurses-dev \
         strace \
-        valgrind
+        valgrind \
+        rust \
+        cargo
 
-COPY musl-cargo-config.toml ~/.cargo/config.toml 
+# COPY musl-cargo-config.toml ~/.cargo/config.toml 
 
 # for static bindgen
 ENV LIBCLANG_STATIC_PATH=/usr/lib
 ENV CMAKE_MAKE_PROGRAM=make
 
 
-RUN curl -o setup.sh --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs && chmod +x setup.sh && ./setup.sh -y && rm setup.sh
+# RUN curl -o setup.sh --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs && chmod +x setup.sh && ./setup.sh -y && rm setup.sh
 
-RUN source $HOME/.cargo/env && rustup toolchain install --force-non-host \
-        stable-x86_64-unknown-linux-musl \
-        beta-x86_64-unknown-linux-musl \
-        nightly-x86_64-unknown-linux-musl
+# RUN source $HOME/.cargo/env && rustup toolchain install --force-non-host \
+#         stable-x86_64-unknown-linux-musl \
+#         beta-x86_64-unknown-linux-musl \
+#         nightly-x86_64-unknown-linux-musl
 
-RUN source $HOME/.cargo/env && rustup component add clippy
-RUN source $HOME/.cargo/env && rustup target add x86_64-unknown-linux-musl
-RUN source $HOME/.cargo/env && rustup default nightly
+# RUN source $HOME/.cargo/env && rustup component add clippy
+# RUN source $HOME/.cargo/env && rustup target add x86_64-unknown-linux-musl
+# RUN source $HOME/.cargo/env && rustup default nightly
