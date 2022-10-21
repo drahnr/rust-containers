@@ -3,4 +3,4 @@ target = "x86_64-unknown-linux-musl"
 
 [target.x86_64-unknown-linux-musl]
 linker = "clang"
-rustflags = ["link-arg=-fuse-ld=lld", "relocation-model=static"]
+rustflags = ["link-arg=-fuse-ld=lld", "relocation-model=static", "+crt-static"]
