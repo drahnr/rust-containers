@@ -116,8 +116,8 @@ USER sirmergealot
 RUN echo "Building OpenSSL" && \
     ls /usr/include/linux && \
     cd /tmp && \
-    curl -LO "https://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz" && \
-    tar xvzf "openssl-$OPENSSL_VERSION.tar.gz" && cd "openssl-$OPENSSL_VERSION" && \
+    curl -L -o - "https://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz" | tar xvzf - && \
+    cd "openssl-$OPENSSL_VERSION" && \
     ./Configure no-shared no-zlib -fPIC --prefix=/usr/local/ -DOPENSSL_NO_SECURE_MEMORY linux-x86_64 && \
     make depend && \
     make && \
@@ -127,8 +127,7 @@ RUN echo "Building OpenSSL" && \
 
 RUN echo "Building zlib" && \
     cd /tmp && \
-    curl -LO "http://zlib.net/zlib-$ZLIB_VERSION.tar.xz" && \
-    tar xJf "zlib-$ZLIB_VERSION.tar.xz" && \
+    curl -L -o - "http://zlib.net/zlib-$ZLIB_VERSION.tar.xz" | tar xJf - && \
     cd "zlib-$ZLIB_VERSION" && \
     ./configure --static --prefix=/usr/local/ && \
     make && \
@@ -138,8 +137,8 @@ RUN echo "Building zlib" && \
 
 RUN echo "Building libgit" && \
     cd /tmp && \
-    curl -LO "https://github.com/libgit2/libgit2/archive/v${LIBGIT2_VERSION}.tar.gz" && \
-    tar xzf "v${LIBGIT2_VERSION}.tar.gz" && cd "./libgit2-${LIBGIT2_VERSION}/" && \
+    curl -L -o - "https://github.com/libgit2/libgit2/archive/v${LIBGIT2_VERSION}.tar.gz" | tar xzf - && \
+    cd "./libgit2-${LIBGIT2_VERSION}/" && \
     mkdir build && cd build && \
     cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DBUILD_CLAR=OFF -DCMAKE_INSTALL_PREFIX=/usr/local/ .. && \
     sudo cmake --build . --target install && \
