@@ -5,28 +5,53 @@ LABEL maintainer="Bernhard Schuster <bernhard@ahoi.io>"
 USER root
 
 RUN apk --no-cache add \
-        g++ \
         gcc \
+        g++ \
         make \
-        hunspell \
+        libhunspell \
+        hunspell-dev \
         openssl \
         cmake \
         autoconf \
         automake \
         xz \
+        xz-dev \
+        xz-libs \
+        xz-static \
         zlib \
+        zlib-dev \
+        zlib-libs \
+        zlib-static \
         libbz2 \
+        gzip \
         lz4 \
+        lz4-dev \
+        lz4-libs \
+        lz4-static \
+        ncurses-static \
+        ncurses-dev \
         which \
         fd \
         ripgrep \
         curl \
         wget \
-        clang \
-        lld
+        git \
+        lld \
+        clang15 \
+        clang15-static \
+        clang15-libclang \
+        clang15-dev \
+        llvm15-dev \
+        ncurses-static \
+        ncurses-libs \
+        ncurses-dev \
+        strace \
+        valgrind
 
 COPY musl-cargo-config.toml ~/.cargo/config.toml 
 
+# for static bindgen
+ENV LIBCLANG_STATIC_PATH=/usr/lib
 ENV CMAKE_MAKE_PROGRAM=make
 
 
