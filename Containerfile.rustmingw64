@@ -7,6 +7,7 @@ LABEL maintainer="Bernhard Schuster <bernhard@ahoi.io>"
 RUN dnf update -y && \
     dnf install -y \
         gcc clang clang-devel llvm \
+        mold \
         cmake \
         curl \
         file \

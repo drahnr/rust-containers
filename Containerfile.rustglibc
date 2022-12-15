@@ -24,6 +24,7 @@ ARG LIBGIT2_VERSION=0.28.3
 RUN dnf update -y && \
     dnf install -y \
         gcc clang clang-devel llvm \
+        mold \
         cmake \
         curl \
         file \
@@ -100,11 +101,6 @@ RUN dnf update -y && \
         && \
     dnf clean all && rm -rf /var/cache/*
 
-# install mold first, so it's picked up by all compillations passes following?
-RUN echo "Installing mold" && cd /tmp && \
-curl -L "https://github.com/rui314/mold/releases/download/v${MOLD_VERSION}/mold-${MOLD_VERSION}-x86_64-linux.tar.gz" | tar xvz && \
-cp "/tmp/mold-${MOLD_VERSION}-x86_64-linux/bin/"* /usr/local/bin/ && \
-chmod +x /usr/local/bin/*
 
 USER sirmergealot
 
