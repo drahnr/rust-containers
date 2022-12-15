@@ -273,7 +273,7 @@ jobs:
             cargo +nightly b
 
 
-  - name: test-rust-mingw64-env-test
+  - name: test-rust-mingw64-env
     build_logs_to_retain: 5
     public: true
     serial: true
