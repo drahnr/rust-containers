@@ -36,7 +36,7 @@ resources:
     branch: master
     uri: git@github.com:drahnr/rust-containers.git
     private_key: ((sirmergealot-ssh-key))
-    paths: [ Containerfile.rustglibc ]
+    paths: [ Containerfile.rustmingw64 ]
 
 - name: recipe-rust-musl-env
   type: git
