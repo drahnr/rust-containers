@@ -1,0 +1,91 @@
+FROM fedora:latest
+LABEL maintainer="Bernhard Schuster <bernhard@ahoi.io>"
+
+# The OpenSSL version to use. We parameterize this because many Rust
+# projects will fail to build with 1.1.
+
+RUN dnf update -y && \
+    dnf install -y \
+        gcc clang clang-devel llvm \
+        cmake \
+        curl \
+        file \
+        git \
+        pkgconf \
+        pkgconf-pkg-config \
+        sudo \
+        make \
+        cmake \
+        xz xz-static xz-devel \
+        zlib zlib-devel zlib-static \
+        snappy snappy-devel \
+        zstd libzstd-devel libzstd-static \
+        bzip2 bzip2-devel bzip2-static \
+        lz4 lz4-libs lz4-devel lz4-static \
+        libseccomp-static libseccomp libseccomp-devel \
+        mingw-binutils-generic \
+        mingw64-llvm \
+        mingw64-llvm-static \
+        mingw64-llvm-tools \
+        mingw64-hunspell \
+        mingw64-hunspell-static \
+        mingw64-winpthreads-static \
+        mingw64-crt \
+        mingw64-cpp \
+        mingw64-gcc \
+        mingw64-gcc-c++ \
+        mingw64-zstd \
+        mingw64-zlib \
+        mingw64-zlib-static \
+        mingw64-libzip \
+        mingw64-zlib-static \
+        mingw64-xz-libs \
+        mingw64-xz-libs-static \
+        mingw64-openssl \
+        mingw64-openssl-static \
+        mingw64-harfbuzz \
+        mingw64-harfbuzz-static \
+        mingw64-graphite2 \
+        mingw64-graphite2-static \
+        mingw64-freetype \
+        mingw64-freetype-static \
+        mingw64-fontconfig \
+        mingw64-fontconfig-static \
+        mingw64-libpng-static \
+        mingw-filesystem-base \
+        mingw-w64-tools \
+        sd ripgrep fd-find \
+        && \
+    dnf clean all && rm -rf /var/cache/*
+
+RUN  useradd sirmergealot --user-group --create-home --shell /bin/bash --groups wheel
+
+# Allow sudo without a password.
+RUN echo "%wheel    ALL=(ALL)   NOPASSWD: ALL" >  /etc/sudoers.d/nopasswd
+
+# Run all further code as user `rust`, and create our working directories
+# as the appropriate user.
+USER sirmergealot
+
+COPY mingw64-cargo-config.toml ~/.cargo/config.toml 
+
+RUN mkdir -p /home/sirmergealot/libs /home/sirmergealot/src
+
+# Set up our path with all our binary directories, including those for the
+# musl-gcc toolchain and for our Rust toolchain.
+ENV PATH=/home/sirmergealot/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# Install our Rust toolchain and the `musl` target.  We patch the
+# command-line we pass to the installer so that it won't attempt to
+# interact with the user or fool around with TTYs.  We also set the default
+# `--target` to musl so that our users don't need to keep overriding it
+# manually.
+RUN curl https://sh.rustup.rs -sSf | \
+    sh -s -- -y --default-toolchain stable
+RUN rustup +stable target add x86_64-pc-windows-gnu
+
+RUN sudo ln -s /usr/local/lib64 /usr/local/lib
+
+# Expect our source code to live in /home/sirmergealot/src.  We'll run the build as
+# user `sirmergealot`, which will be uid 1000, gid 1000 outside the container.
+WORKDIR /home/sirmergealot/src

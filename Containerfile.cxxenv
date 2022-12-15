@@ -1,7 +1,6 @@
 
 FROM alpine:edge
-
-MAINTAINER Bernhard Schuster "bernhard@ahoi.io"
+LABEL maintainer="Bernhard Schuster <bernhard@ahoi.io>"
 
 RUN apk add build-base gcc abuild binutils curl \
      cmake extra-cmake-modules git \

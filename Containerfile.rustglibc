@@ -1,4 +1,5 @@
 FROM fedora:latest
+LABEL maintainer="Bernhard Schuster <bernhard@ahoi.io>"
 
 # The OpenSSL version to use. We parameterize this because many Rust
 # projects will fail to build with 1.1.
@@ -26,8 +27,9 @@ RUN dnf update -y && \
         cmake \
         curl \
         file \
-        git \
+        git libgit2-devel\
         glibc-devel \
+        openssl openssl-devel \
         hunspell hunspell-devel \
         pkgconf \
         sudo \
@@ -40,7 +42,6 @@ RUN dnf update -y && \
         bzip2 bzip2-devel bzip2-static \
         lz4 lz4-libs lz4-devel lz4-static \
         libseccomp-static libseccomp libseccomp-devel \
-        mingw64-winpthreads-static mingw64-gcc mingw64-gcc-c++ \
         sd ripgrep fd-find \
         protobuf-static protobuf protobuf-compiler \
         capnproto-devel capnproto capnproto-libs \
@@ -78,12 +79,6 @@ RUN curl https://sh.rustup.rs -sSf | \
 RUN rustup toolchain add nightly beta
 RUN rustup component add clippy
 RUN rustup component add rustfmt
-RUN rustup +stable target add x86_64-pc-windows-gnu
-RUN rustup +beta target add x86_64-pc-windows-gnu
-RUN rustup +nightly target add x86_64-pc-windows-gnu
-RUN rustup +stable target add wasm32-unknown-unknown
-RUN rustup +beta target add wasm32-unknown-unknown
-RUN rustup +nightly target add wasm32-unknown-unknown
 
 RUN sudo ln -s /usr/local/lib64 /usr/local/lib
 # Build a static library version of OpenSSL using musl-libc.  This is needed by

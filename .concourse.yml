@@ -27,7 +27,16 @@ resources:
     branch: master
     uri: git@github.com:drahnr/rust-containers.git
     private_key: ((sirmergealot-ssh-key))
-    paths: [ Dockerfile.rustglibc ]
+    paths: [ Containerfile.rustglibc ]
+
+- name: recipe-rust-mingw64-env
+  type: git
+  icon: git
+  source:
+    branch: master
+    uri: git@github.com:drahnr/rust-containers.git
+    private_key: ((sirmergealot-ssh-key))
+    paths: [ Containerfile.rustglibc ]
 
 - name: recipe-rust-musl-env
   type: git
@@ -36,7 +45,7 @@ resources:
     branch: master
     uri: git@github.com:drahnr/rust-containers.git
     private_key: ((sirmergealot-ssh-key))
-    paths: [ Dockerfile.rustmusl ]
+    paths: [ Containerfile.rustmusl ]
 
 - name: recipe-cxx-env
   type: git
@@ -45,11 +54,11 @@ resources:
     branch: master
     uri: git@github.com:drahnr/rust-containers.git
     private_key: ((sirmergealot-ssh-key))
-    paths: [ Dockerfile.cxxenv ]
+    paths: [ Containerfile.cxxenv ]
 
 - name: env-rust-musl
   type: registry-image
-  icon: docker
+  icon: oci
   source:
     tag: latest
     repository: quay.io/drahnr/rust-musl-builder
@@ -58,16 +67,26 @@ resources:
 
 - name: env-rust-glibc
   type: registry-image
-  icon: docker
+  icon: oci
   source:
     tag: latest
     repository: quay.io/drahnr/rust-glibc-builder
     username: ((quay-drahnr-username))
     password: ((quay-drahnr-password))
 
+
+- name: env-rust-mingw64
+  type: registry-image
+  icon: oci
+  source:
+    tag: latest
+    repository: quay.io/drahnr/rust-mingw64-builder
+    username: ((quay-drahnr-username))
+    password: ((quay-drahnr-password))
+
 - name: env-cxx
   type: registry-image
-  icon: docker
+  icon: oci
   source:
     tag: latest
     repository: quay.io/drahnr/container-cxx-env
@@ -101,7 +120,7 @@ jobs:
 
         # TODO caching!
         params:
-          DOCKERFILE: recipe/Dockerfile.rustmusl
+          DOCKERFILE: recipe/Containerfile.rustmusl
           CONTEXT: recipe
 
         inputs:
@@ -166,7 +185,7 @@ jobs:
           source:
             repository: concourse/oci-build-task
         params:
-          DOCKERFILE: recipe/Dockerfile.rustglibc
+          DOCKERFILE: recipe/Containerfile.rustglibc
           CONTEXT: recipe
 
         inputs:
@@ -181,6 +200,45 @@ jobs:
     - put: env-rust-glibc
       params: {image: image/image.tar}
 
+
+  - name: create-rust-mingw64-env
+    build_logs_to_retain: 5
+    public: true
+    serial: true
+    plan:
+    - get: recipe
+      resource: recipe-rust-mingw64-env
+      trigger: true
+
+    # - get: timed-trigger
+    #   resource: daily
+    #   trigger: true
+
+    - task: build
+      privileged: true
+
+      config:
+        platform: linux
+
+        image_resource:
+          type: registry-image
+          source:
+            repository: concourse/oci-build-task
+        params:
+          DOCKERFILE: recipe/Containerfile.rustmingw64
+          CONTEXT: recipe
+
+        inputs:
+        - name: recipe
+
+        outputs:
+        - name: image
+
+        run:
+          path: build
+
+    - put: env-rust-mingw64
+      params: {image: image/image.tar}
 
   - name: test-rust-glibc-env
     build_logs_to_retain: 5
@@ -197,6 +255,39 @@ jobs:
         platform: linux
         inputs:
         - name: env-rust-glibc
+
+        run:
+          user: sirmergealot
+          path: sh
+          args:
+          - -exc
+          - |
+            sudo chown $(whoami): -Rf .
+            rustup which rustc
+            rustup default
+            rustc --version
+            cargo init --bin testy
+            cd testy
+            cargo +stable b
+            cargo +beta b
+            cargo +nightly b
+
+
+  - name: test-rust-mingw64-env-test
+    build_logs_to_retain: 5
+    public: true
+    serial: true
+    plan:
+    - get: env-rust-mingw64
+      trigger: true
+      passed: [create-rust-mingw64-env]
+
+    - task: test-rust-mingw64-env
+      image: env-rust-mingw64
+      config:
+        platform: linux
+        inputs:
+        - name: env-rust-mingw64
 
         run:
           user: sirmergealot
@@ -239,7 +330,7 @@ jobs:
             repository: vito/oci-build-task
 
         params:
-          DOCKERFILE: recipe/Dockerfile.cxxenv
+          DOCKERFILE: recipe/Containerfile.cxxenv
 
         inputs:
         - name: recipe
