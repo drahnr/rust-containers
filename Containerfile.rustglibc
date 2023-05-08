@@ -77,7 +77,7 @@ ENV PATH=/home/sirmergealot/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:
 # manually.
 RUN curl https://sh.rustup.rs -sSf | \
     sh -s -- -y --default-toolchain stable
-RUN rustup toolchain add nightly beta
+RUN rustup toolchain install beta nightly --allow-downgrade -c rustfmt
 RUN rustup component add clippy
 RUN rustup component add rustfmt
 
