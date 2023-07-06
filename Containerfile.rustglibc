@@ -28,7 +28,8 @@ RUN dnf update -y && \
         cmake \
         curl \
         file \
-        git libgit2-devel\
+        diffutils \
+        git libgit2-devel \
         glibc-devel \
         openssl openssl-devel \
         hunspell hunspell-devel \
