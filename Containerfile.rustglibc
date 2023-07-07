@@ -30,6 +30,8 @@ RUN dnf update -y && \
         file \
         diffutils \
         git libgit2-devel \
+        libssh2 libssh2-devel \
+        http-parser http-parser-devel \
         glibc-devel \
         openssl openssl-devel \
         hunspell hunspell-devel \
