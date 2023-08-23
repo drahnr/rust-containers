@@ -29,6 +29,10 @@ RUN dnf update -y && \
         curl \
         file \
         diffutils \
+        binutils{,-devel} \
+        libunwind{,-devel} \
+        perf \
+        libblocksruntime{,-static,-devel} \
         git libgit2-devel \
         libssh2 libssh2-devel \
         http-parser http-parser-devel \
@@ -46,6 +50,7 @@ RUN dnf update -y && \
         bzip2 bzip2-devel bzip2-static \
         lz4 lz4-libs lz4-devel lz4-static \
         libseccomp-static libseccomp libseccomp-devel \
+        which \
         sd ripgrep fd-find \
         protobuf-static protobuf protobuf-compiler \
         capnproto-devel capnproto capnproto-libs \
