@@ -185,7 +185,7 @@ RUN cargo install -f cargo-spellcheck && \
 	 cargo install -f cargo-criterion && \
 	 cargo install --locked -f cargo-deny && \
 	 cargo install -f cargo-semver-checks && \
-	 cargo install -f cargo-flamegraph && \
+	 cargo install -f flamegraph && \
 	 cargo install -f cargo-hongg && \
 	 cargo install -f cargo-hfuzz && \
 	 cargo install --bin taplo --git https://github.com/drahnr/taplo.git taplo-cli && \
