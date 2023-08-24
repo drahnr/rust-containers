@@ -5,8 +5,7 @@ LABEL maintainer="Bernhard Schuster <bernhard@ahoi.io>"
 # projects will fail to build with 1.1.
 ARG OPENSSL_VERSION=1.1.1q
 
-ARG ZLIB_VERSION=1.2.13
-
+ARG ZLIB_VERSION=1.3
 ARG MOLD_VERSION=1.5.1
 ARG MDBOOK_VERSION=0.4.21
 
