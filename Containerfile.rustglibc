@@ -27,6 +27,7 @@ RUN dnf update -y && \
         cmake \
         curl \
         file \
+        jq \
         diffutils \
         binutils{,-devel} \
         libunwind{,-devel} \
