@@ -90,6 +90,7 @@ RUN rustup toolchain install beta --profile minimal --allow-downgrade -c rustfmt
 RUN rustup toolchain install --target wasm32-unknown-unknown --profile minimal nightly
 RUN rustup component add clippy
 RUN rustup component add rustfmt
+RUN rustup component add rust-src
 
 RUN sudo ln -s /usr/local/lib64 /usr/local/lib
 # Build a static library version of OpenSSL using musl-libc.  This is needed by
