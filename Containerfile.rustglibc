@@ -52,7 +52,7 @@ RUN dnf update -y && \
         libseccomp-static libseccomp libseccomp-devel \
         which \
         sd ripgrep fd-find \
-        protobuf protobuf-compiler \
+        protobuf-static protobuf protobuf-compiler \
         capnproto-devel capnproto capnproto-libs \
         rocksdb rocksdb-devel \
         && \
