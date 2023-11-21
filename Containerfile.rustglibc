@@ -1,4 +1,4 @@
-FROM fedora:latest
+FROM fedora:38
 LABEL maintainer="Bernhard Schuster <bernhard@ahoi.io>"
 
 # The OpenSSL version to use. We parameterize this because many Rust
