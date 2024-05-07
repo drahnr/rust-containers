@@ -87,7 +87,8 @@ RUN curl https://sh.rustup.rs -sSf | \
     sh -s -- -y --default-toolchain stable
 RUN rustup toolchain install nightly --profile minimal --allow-downgrade -c rustfmt -c clippy
 RUN rustup toolchain install beta --profile minimal --allow-downgrade -c rustfmt -c clippy
-RUN rustup toolchain install --target wasm32-unknown-unknown --profile minimal nightly
+RUN rustup toolchain install nightly --target wasm32-unknown-unknown --profile minimal
+RUN rustup toolchain install stable  --target wasm32-unknown-unknown --profile minimal
 RUN rustup component add clippy
 RUN rustup component add rustfmt
 RUN rustup component add rust-src
