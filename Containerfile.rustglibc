@@ -52,9 +52,9 @@ RUN dnf update -y && \
         libseccomp-static libseccomp libseccomp-devel \
         which \
         sd ripgrep fd-find \
+        elfutils-libelf elfutils-libelf-devel \
         protobuf-static protobuf protobuf-compiler \
         capnproto-devel capnproto capnproto-libs \
-        rocksdb rocksdb-devel \
         && \
     dnf clean all && rm -rf /var/cache/*
 
